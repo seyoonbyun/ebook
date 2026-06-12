@@ -8,15 +8,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* 책 데이터 렌더링 완료 전까지 본문 숨김 (깜빡임 방지) */
+      .detail-loading .detail-fade {
+        opacity: 0;
+      }
+      .detail-fade {
+        opacity: 1;
+        transition: opacity 0.25s ease;
+      }
+    </style>
   </head>
-  <body>
+  <body class="detail-loading">
 
     <!-- ① 공지 바 -->
     <div class="announcement-bar text-center py-2">
       <small>🎉 신규 가입 시 첫 달 무료 · 전자책 30만 권 보유</small>
     </div>
 
-    <!-- ② 네비게이션 1단: 로고 + 검색 + 로그인/회원가입/장바구니 -->
+    <!-- ② 네비게이션 1단 -->
     <nav class="navbar sticky-top" id="mainNav">
       <div class="container">
 
@@ -42,12 +52,15 @@
           <a href="login.html" class="btn btn-primary-custom btn-sm d-none d-lg-block">
             회원가입
           </a>
+
+          <!-- 장바구니 (배지 포함) -->
           <a href="#" class="nav-icon d-none d-lg-block position-relative">
             <i class="bi bi-bag"></i>
             <span class="ms-1 small">장바구니</span>
             <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle"
               id="cartCount" style="display:none; font-size:10px;">0</span>
           </a>
+
           <button class="navbar-toggler border-0" type="button"
             data-bs-toggle="collapse" data-bs-target="#navMenu">
             <i class="bi bi-list fs-4"></i>
@@ -71,14 +84,13 @@
             <li class="nav-item"><a class="nav-link" href="list.html">오디오북</a></li>
             <li class="nav-item"><a class="nav-link" href="login.html">로그인</a></li>
             <li class="nav-item"><a class="nav-link" href="login.html">회원가입</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">장바구니</a></li>
           </ul>
         </div>
 
       </div>
     </nav>
 
-    <!-- ② 네비게이션 2단: 카테고리 메뉴 -->
+    <!-- ② 네비게이션 2단 -->
     <div class="category-nav">
       <div class="container">
         <ul class="category-menu">
@@ -95,7 +107,7 @@
     <div class="breadcrumb-bar">
       <div class="container">
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
+          <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="index.html">홈</a></li>
             <li class="breadcrumb-item"><a href="list.html">경제경영</a></li>
             <li class="breadcrumb-item active" aria-current="page">부의 추월차선</li>
@@ -105,17 +117,22 @@
     </div>
 
     <!-- ④ 도서 상세 -->
-    <section class="py-5">
+    <section class="py-5 detail-fade">
       <div class="container">
         <div class="row g-4 g-lg-5">
 
           <!-- 표지 + 위시리스트/공유 -->
           <div class="col-lg-3">
             <div class="cover-sticky">
-              <img src="images/book_fastlane.jpg" alt="부의 추월차선 표지" class="detail-cover-img" />
+              <img src="images/book_economy1.png"
+                alt="부의 추월차선 표지" class="detail-cover-img" />
+
+              <!-- id="wishBtn" : detail.js 위시리스트 토글 -->
               <button class="btn btn-wish w-100 mb-2" type="button" id="wishBtn">
                 <i class="bi bi-heart"></i> 위시리스트
               </button>
+
+              <!-- id="shareBtn" : detail.js 링크 복사 -->
               <button class="btn btn-wish w-100" type="button" id="shareBtn">
                 <i class="bi bi-share"></i> 공유하기
               </button>
@@ -158,20 +175,30 @@
 
             <div class="detail-price">
               ₩12,000
-              <span class="price-sub"><del class="text-muted">₩15,000</del> · 구독 시 무료</span>
+              <span class="price-sub">
+                <del class="text-muted">₩15,000</del> · 구독 시 무료
+              </span>
             </div>
 
             <div class="row g-2 mb-2">
+              <!-- id="cartBtn" : detail.js 장바구니 담기 -->
               <div class="col-6">
                 <button class="btn btn-cart-lg w-100" type="button" id="cartBtn">
                   <i class="bi bi-bag-plus"></i> 장바구니 담기
                 </button>
               </div>
+              <!-- id="subscribeBtn" : detail.js 뷰어 연결 -->
               <div class="col-6">
-                <button class="btn btn-subscribe w-100" type="button" id="subscribeBtn">구독으로 읽기</button>
+                <button class="btn btn-subscribe w-100" type="button" id="subscribeBtn">
+                  구독으로 읽기
+                </button>
               </div>
             </div>
-            <button class="btn btn-buy w-100" type="button" id="buyBtn">소장하기</button>
+
+            <!-- id="buyBtn" : detail.js 토스페이먼츠 결제 -->
+            <button class="btn btn-buy w-100" type="button" id="buyBtn">
+              소장하기
+            </button>
           </div>
 
         </div>
@@ -185,80 +212,16 @@
             단순히 아끼고 절약하는 방식이 아닌, 빠른 부를 만드는 시스템 구축의 중요성을 강조한다.<br /><br />
             평범한 사람들이 평생 일하고도 부자가 되지 못하는 이유를 '서행차선'이라는 개념으로
             날카롭게 분석하며, 누구나 인생의 '추월차선'으로 갈아탈 수 있는 구체적인 로드맵을 제시한다.
-            돈이 아니라 시간의 자유를 원하는 모든 이에게 권하는 단 한 권의 책.
           </p>
         </div>
 
-        <!-- 목차 -->
+        <!-- 목차 (books.js가 동적으로 채움) -->
         <div class="detail-section">
           <h2 class="detail-section-title">목차</h2>
-          <div class="accordion toc-accordion" id="tocAccordion">
-
-            <div class="accordion-item">
-              <h3 class="accordion-header">
-                <button class="accordion-button" type="button"
-                  data-bs-toggle="collapse" data-bs-target="#toc1">
-                  1부 — 부의 잘못된 지도
-                </button>
-              </h3>
-              <div id="toc1" class="accordion-collapse collapse show" data-bs-parent="#tocAccordion">
-                <div class="accordion-body">
-                  <div class="toc-line"><span>1장. 나는 어떻게 백만장자가 되었나</span><span class="toc-page">p.18</span></div>
-                  <div class="toc-line"><span>2장. 부의 신화와 수학</span><span class="toc-page">p.34</span></div>
-                  <div class="toc-line"><span>3장. 느린 차선의 치명적 결함</span><span class="toc-page">p.52</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <h3 class="accordion-header">
-                <button class="accordion-button collapsed" type="button"
-                  data-bs-toggle="collapse" data-bs-target="#toc2">
-                  2부 — 부의 추월차선으로 갈아타기
-                </button>
-              </h3>
-              <div id="toc2" class="accordion-collapse collapse" data-bs-parent="#tocAccordion">
-                <div class="accordion-body">
-                  <div class="toc-line"><span>4장. 추월차선의 사고방식</span><span class="toc-page">p.88</span></div>
-                  <div class="toc-line"><span>5장. 부의 5가지 씨앗</span><span class="toc-page">p.110</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <h3 class="accordion-header">
-                <button class="accordion-button collapsed" type="button"
-                  data-bs-toggle="collapse" data-bs-target="#toc3">
-                  3부 — 시스템을 만드는 법
-                </button>
-              </h3>
-              <div id="toc3" class="accordion-collapse collapse" data-bs-parent="#tocAccordion">
-                <div class="accordion-body">
-                  <div class="toc-line"><span>6장. 돈을 만드는 시스템</span><span class="toc-page">p.158</span></div>
-                  <div class="toc-line"><span>7장. 자동화의 힘</span><span class="toc-page">p.182</span></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <h3 class="accordion-header">
-                <button class="accordion-button collapsed" type="button"
-                  data-bs-toggle="collapse" data-bs-target="#toc4">
-                  4부 — 재정적 자유를 향한 로드맵
-                </button>
-              </h3>
-              <div id="toc4" class="accordion-collapse collapse" data-bs-parent="#tocAccordion">
-                <div class="accordion-body">
-                  <div class="toc-line"><span>8장. 자유를 향한 마지막 관문</span><span class="toc-page">p.420</span></div>
-                  <div class="toc-line"><span>9장. 지금 시작하라</span><span class="toc-page">p.448</span></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
+          <div class="accordion toc-accordion" id="tocAccordion"></div>
         </div>
 
-        <!-- 리뷰 -->
+        <!-- 독자 리뷰 -->
         <div class="detail-section">
           <h2 class="detail-section-title">독자 리뷰</h2>
           <div class="row g-4 align-items-center mb-4">
@@ -284,7 +247,9 @@
                       <span class="review-date">2025.05.22</span>
                     </div>
                     <div class="detail-stars my-1" style="font-size:12px">
-                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
                     </div>
                     <p class="review-text">인생의 방향을 다시 잡게 해준 책. 막연했던 부에 대한 생각이 시스템 관점으로 정리됐어요.</p>
                   </div>
@@ -296,7 +261,9 @@
                       <span class="review-date">2025.05.18</span>
                     </div>
                     <div class="detail-stars my-1" style="font-size:12px">
-                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star"></i>
                     </div>
                     <p class="review-text">조금 반복되는 내용도 있지만 핵심 메시지는 강력합니다. 사회초년생에게 추천!</p>
                   </div>
@@ -310,54 +277,84 @@
         <div class="detail-section">
           <h2 class="detail-section-title">함께 보면 좋은 책</h2>
           <div class="row g-4">
+
             <div class="col-6 col-md-3">
               <div class="book-card">
-                <div class="book-cover bc-5"><span class="badge book-badge bg-dark">베스트</span></div>
+                <a href="detail.html?id=money-psychology" class="text-decoration-none">
+                  <div class="book-cover bc-5">
+                    <img src="images/book_economy2.png" alt="돈의 심리학" />
+                    <span class="badge book-badge bg-dark">베스트</span>
+                  </div>
+                </a>
                 <div class="mt-3">
                   <p class="book-brand">PAGELY</p>
                   <h6 class="book-title">돈의 심리학</h6>
+                  <span class="book-category">경제경영</span>
                   <p class="book-author">모건 하우절</p>
                   <p class="book-price">₩14,000</p>
-                  <a href="detail.html" class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
+                  <a href="detail.html?id=money-psychology"
+                    class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
                 </div>
               </div>
             </div>
+
             <div class="col-6 col-md-3">
               <div class="book-card">
-                <div class="book-cover bc-2"></div>
+                <a href="detail.html?id=atomic-habits" class="text-decoration-none">
+                  <div class="book-cover bc-2">
+                    <img src="images/book_selfdev1.png" alt="아주 작은 습관의 힘" />
+                  </div>
+                </a>
                 <div class="mt-3">
                   <p class="book-brand">PAGELY</p>
                   <h6 class="book-title">아주 작은 습관의 힘</h6>
+                  <span class="book-category">자기개발</span>
                   <p class="book-author">제임스 클리어</p>
                   <p class="book-price">₩13,500</p>
-                  <a href="detail.html" class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
+                  <a href="detail.html?id=atomic-habits"
+                    class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
                 </div>
               </div>
             </div>
+
             <div class="col-6 col-md-3">
               <div class="book-card">
-                <div class="book-cover bc-8"></div>
+                <a href="detail.html?id=zero-to-one" class="text-decoration-none">
+                  <div class="book-cover bc-8">
+                    <img src="images/book_economy3.png" alt="제로 투 원" />
+                  </div>
+                </a>
                 <div class="mt-3">
                   <p class="book-brand">PAGELY</p>
                   <h6 class="book-title">제로 투 원</h6>
+                  <span class="book-category">경제경영</span>
                   <p class="book-author">피터 틸</p>
                   <p class="book-price">₩13,000</p>
-                  <a href="detail.html" class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
+                  <a href="detail.html?id=zero-to-one"
+                    class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
                 </div>
               </div>
             </div>
+
             <div class="col-6 col-md-3">
               <div class="book-card">
-                <div class="book-cover bc-7"></div>
+                <a href="detail.html?id=miracle-morning" class="text-decoration-none">
+                  <div class="book-cover bc-7">
+                    <img src="images/book_selfdev2.png" alt="미라클 모닝" />
+                  </div>
+                </a>
                 <div class="mt-3">
                   <p class="book-brand">PAGELY</p>
                   <h6 class="book-title">미라클 모닝</h6>
+                  <span class="book-category">자기개발</span>
                   <p class="book-author">할 엘로드</p>
                   <p class="book-price">₩11,000</p>
-                  <a href="detail.html" class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
+                  <a href="detail.html?id=miracle-morning"
+                    class="btn btn-outline-primary-custom btn-sm rounded-0 w-100">담기</a>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -368,6 +365,7 @@
     <footer class="footer py-5">
       <div class="container">
         <div class="row g-4">
+
           <div class="col-md-4">
             <img src="images/logo_white.png" alt="Pagely 로고" height="34" class="mb-3" />
             <p class="text-muted small">읽는 즐거움, 언제 어디서나.<br/>30만 권의 전자책 플랫폼.</p>
@@ -378,6 +376,7 @@
               <a href="#" class="social-icon"><i class="bi bi-twitter-x"></i></a>
             </div>
           </div>
+
           <div class="col-6 col-md-2">
             <h6 class="footer-heading">고객센터</h6>
             <ul class="list-unstyled">
@@ -386,18 +385,23 @@
               <li><a href="#" class="footer-link">1:1 문의</a></li>
             </ul>
           </div>
+
           <div class="col-6 col-md-2">
             <h6 class="footer-heading">서비스</h6>
             <ul class="list-unstyled">
               <li><a href="#" class="footer-link">제휴카드</a></li>
               <li><a href="#" class="footer-link">뷰어 다운로드</a></li>
             </ul>
-            <h6 class="footer-heading mt-3">기타 문의</h6>
+          </div>
+
+          <div class="col-6 col-md-2">
+            <h6 class="footer-heading">기타 문의</h6>
             <ul class="list-unstyled">
               <li><a href="#" class="footer-link">원고 투고</a></li>
               <li><a href="#" class="footer-link">사업 제휴</a></li>
             </ul>
           </div>
+
           <div class="col-6 col-md-2">
             <h6 class="footer-heading">회사</h6>
             <ul class="list-unstyled">
@@ -405,6 +409,7 @@
               <li><a href="#" class="footer-link">인재 채용</a></li>
             </ul>
           </div>
+
         </div>
         <hr class="footer-hr mt-4 mb-3" />
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
@@ -418,6 +423,7 @@
       </div>
     </footer>
 
+    <!-- 스크립트 로드 순서 중요: Bootstrap → Toss → books.js → detail.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://js.tosspayments.com/v1/payment"></script>
     <script src="books.js"></script>
